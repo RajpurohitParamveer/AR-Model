@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View in AR</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer@latest"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        model-viewer {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <model-viewer id="ar-view" 
+        src="09_02_2025.glb" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look"
+        ar-scale="fixed"
+        camera-controls 
+        shadow-intensity="1" 
+        interaction-prompt="none"
+        disable-tap>
+    </model-viewer>
+    
+    <button id="ar-button">View in AR</button>
+
+    <script>
+        const modelViewer = document.getElementById('ar-view');
+        const arButton = document.getElementById('ar-button');
+
+        // Check if AR is supported
+        if ('xr' in navigator) {
+            navigator.xr.isSessionSupported('immersive-ar').then(supported => {
+                if (!supported) {
+                    arButton.style.display = "none"; // Hide button if AR not supported
+                    alert("Your device does not support Augmented Reality (AR). Please try on a compatible mobile device.");
+                }
+            });
+        } else {
+            arButton.style.display = "none"; // Hide button if XR not available
+            alert("Your browser does not support WebXR. Try using Chrome on Android or Safari on iOS.");
+        }
+
+        // Activate AR when button is clicked
+        arButton.addEventListener("click", () => {
+            modelViewer.activateAR();
+        });
+    </script>
+</body>
+</html>
